@@ -1,0 +1,38 @@
+1. pom.xml
+   - log4jdbc, thymeleaf extra
+
+2. 프로젝트 기획
+- 회원가입 - MemberDao.insert(Member member);
+    url : POST /member/join
+    파라미터 : username, password, email            입력 확인 + 패턴체크
+    작업 후 로그인으로 이동
+- 로그인 - MemberDao.findByUsername(String username);
+    url : POST /member/login                    스프링 시큐리티 처리
+    파라미터 : username, password                    입력 확인
+- 비밀번호 확인 - MemberDao.findByUsername(String username);
+    url : POST /member/check-password
+    파라미터 : password                              입력 확인
+    확인이 되면 그 정보를 세션에 저장 후 내정보보기로 이동
+- 내정보보기 - MemberDao.findByUsername(String username);
+    url : GET /member/readme
+    파라미터 : 없음
+    세션에 비밀번호 확인 정보가 들어있으면 내정보 출력, 없으면 비밀번호 확인으로 이동
+- 비밀번호 변경 - MemberDao.updatePassword(String newPassword, String username)
+    url : POST /member/update-password
+    파라미터 : currentPassword, newPassword         입력확인 + 패턴체크
+    AJAX 처리 - 페이지 이동 X
+
+3. DB 설정 - application.properties, logback.xml, 파일 하나 더
+
+4. 엔티티와 DAO 작성
+
+5. Spring Security 설정
+    - PasswordEncoder
+    - UserDetailsService : 사용자가 입력한 아이디로 db에서 사용자 정보를 읽어 UserDetails에 SS에 전달
+
+
+
+
+
+
+
