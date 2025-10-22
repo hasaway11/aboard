@@ -18,11 +18,11 @@
       return check('아이디', username, pattern, '아이디는 소문자와 숫자 6~10자입니다', $usernameMsg);
     }
 
-    function passwordCheck() {
+    function passwordCheck(target, name) {
       const pattern = /^[A-Za-z0-9]{6,10}$/;
-      const password = $('#password').val();
-      const $passwordMsg = $('#password-msg');
-      return check('비밀번호', password, pattern, '비밀번호는 영숫자 6~10자입니다', $passwordMsg);
+      const password = target.val();
+      const $passwordMsg = target.next();
+      return check(name , password, pattern,  name + '는 영숫자 6~10자입니다', $passwordMsg);
     }
 
     function emailCheck() {
@@ -38,10 +38,10 @@
       const $password2Msg = $('#password2-msg');
       $password2Msg.text('');
       if(password2==='') {
-        $password2Msg.text('새 비밀번호 : 필수입력입니다');
+        $password2Msg.text('비밀번호 확인 : 필수입력입니다');
         return false;
       } else if(password!==password2) {
-        $password2Msg.text('새 비밀번호가 일치하지 않습니다');
+        $password2Msg.text('비밀번호가 일치하지 않습니다');
         return false;
       }
       return true;

@@ -6,6 +6,7 @@ import jakarta.servlet.http.*;
 import jakarta.validation.*;
 import jakarta.validation.constraints.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.http.*;
 import org.springframework.security.access.prepost.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +53,7 @@ public class MemberController {
     return new ModelAndView("redirect:/member/login");
   }
 
+  // MVC : Model View Controller
   @PreAuthorize("isAuthenticated()")
   @PostMapping("/member/check-password")
   public ModelAndView checkPassword(@RequestParam @NotEmpty String password, Principal principal, HttpSession session) {
@@ -60,5 +62,16 @@ public class MemberController {
       return new ModelAndView("redirect:/member/check-password?error");
     session.setAttribute("checkPassword", true);
     return new ModelAndView("redirect:/member/readme");
+  }
+
+  @PreAuthorize("isAuthenticated()")
+  @PostMapping("/member/change-password")
+  public ResponseEntity<?> changePassword(@ModelAttribute @Valid MemberChangePasswordDto dto, Principal principal) {
+    // REST 방식의 응답은 데이터만 들어있다(@ResponseBody)
+    // 여기에 응답코드를 추가하자(200:성공. 기타) : ResponseEntity
+    boolean 변경성공 = memberService.changePassword(dto, principal.getName());
+    if(변경성공==true)
+      return ResponseEntity.ok("비밀번호를 변경했습니다");
+    return ResponseEntity.status(409).body("비밀번호를 변경하지 않습니다");
   }
 }

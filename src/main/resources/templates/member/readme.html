@@ -29,9 +29,67 @@
           <td>권한</td><td th:text="${member.role}"></td>
         </tr>
       </table>
+      <table class="table">
+        <colgroup>
+          <col style="width:30%;">
+          <col style="width:70%;">
+        </colgroup>
+        <tr>
+          <td>현재 비밀번호</td>
+          <td>
+            <input type="password" name="currentPassword" id="currentPassword" class="form-control"
+                   onfocusout="passwordCheck($('#currentPassword'), '현재 비밀번호');">
+            <span class="fail"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>새 비밀번호</td>
+          <td>
+            <input type="password" name="newPassword" id="password" class="form-control"
+                   onfocusout="passwordCheck($('#password'), '새 비밀번호');">
+            <span class="fail"></span>
+          </td>
+        </tr>
+        <tr>
+          <td>새 비밀번호 확인</td>
+          <td>
+            <input type="password" id="password2" class="form-control" onfocusout="password2Check()">
+            <span class="fail" id="password2-msg"></span>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <button class="btn btn-warning" onclick="doChangePassword()">비밀번호 변경하기</button>
+          </td>
+        </tr>
+      </table>
     </section>
   </main>
   <footer th:replace="~{/fragment/header.html}"></footer>
+  <script src="/validate.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    function doChangePassword() {
+      const r2 = passwordCheck($('#password'), '새 비밀번호');
+      const r1 = passwordCheck($('#currentPassword'), '현재 비밀번호');
+      const r3 = password2Check();
+      if((r1 && r2 && r3)===false)
+        return;
+
+      const currentPassword = $('#currentPassword').val();
+      const newPassword = $('#password').val();
+      const params = {currentPassword:currentPassword, newPassword:newPassword};
+
+      // post방식으로 params를 서버로 전달하자
+      // params를 그냥 적으면 json으로 넘어간다. urlencoded 형식으로 인코딩 후 전달하겠다
+      axios.post('/member/change-password', new URLSearchParams(params))
+        .then(res=>alert('비밀번호를 변경했습니다'))
+        .catch(res=> {
+          console.log(res);
+          alert('비밀번호를 변경하지 못했습니다');
+      });
+    }
+  </script>
 </div>
 </body>
 </html>

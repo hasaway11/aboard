@@ -27,7 +27,7 @@
         </div>
         <div class="mt-3 mb-3">
           <label class="form-label">비밀번호:</label>
-          <input class="form-control" name="password" id="password" type="password" onfocusout="passwordCheck();">
+          <input class="form-control" name="password" id="password" type="password" onfocusout="passwordCheck($('#password'), '비밀번호');">
           <span id="password-msg" class="fail"></span>
         </div>
         <div id="error" style="display:none;" class="fail mb-3">아이디 또는 비밀번호가 잘못 되었습니다. 아이디와 비밀번호를 정확히 입력해 주세요.</div>
@@ -48,7 +48,7 @@
   <script>
     function doLogin() {
       const r1 = usernameCheck();
-      const r2 = passwordCheck();
+      const r2 = passwordCheck($('#password'), '비밀번호');
       if((r1 && r2)===false)
         return;
       $('#login-form').submit();
