@@ -10,5 +10,8 @@ public interface BoardDao {
   @Insert("insert into board(bno,title,content,writer) values(board_seq.nextval, #{title},#{content},#{writer})")
   public int insert(Board board);
 
+  @Select("select count(*) from board")
+  public long count();
+
   public List<Board> findByPageno(long start, long end);
 }
