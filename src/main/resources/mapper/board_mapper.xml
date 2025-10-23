@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.aboard.dao.BoardDao">
+  <!--
+    xml에 sql을 작성 + dao와 연결해서 실행 -> namespace는 DAO 이름을 FQN(Fully Qualified Name. 패키지을 포함한 전체 이름)
+  -->
+
+  <!-- resultType은 결과를 담을 객체 -->
+  <select id="findByPageno" resultType="com.example.aboard.entity.Board">
+    <!-- xml에 담긴 xml 부분을 PCDATA, xml이 아닌 부분을 CDATA라고 한다-->
+    <![CDATA[
+      select * from
+      (
+        select rownum as rnum, b.bno, b.title, b.writer, b.write_time as writeTime, b.read_cnt as readCnt from
+          (select * from board order by bno desc) b
+        where rownum<=#{end}
+      )
+      where rnum>#{start}
+    ]]>
+  </select>
+</mapper>
