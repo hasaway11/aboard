@@ -18,4 +18,8 @@
       where rnum>#{start}
     ]]>
   </select>
+
+  <select id="count" resultType="long">
+    select count(*) from board
+  </select>
 </mapper>

@@ -3,6 +3,7 @@ package com.example.aboard.service;
 import com.example.aboard.dao.*;
 import com.example.aboard.dto.*;
 import com.example.aboard.entity.*;
+import jakarta.validation.constraints.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
@@ -55,4 +56,39 @@ public class BoardService {
 
     return new BoardPageDto(boards, pageno, prev, next, pagenos);
   }
+
+  // 조회수 증가 : 로그인 and 글쓴이가 아니다
+  public Board findByBno(Long bno, String loginId) {
+    Board board = boardDao.findByBno(bno);
+    if(loginId!=null && board.getWriter().equals(loginId)==false) {
+      boardDao.increaseReadCnt(bno);
+      board.increaseReadCnt();
+    }
+    return board;
+  }
+
+  public void delete(Long bno, String loginId) {
+    String writer = boardDao.findWriterByBno(bno);
+    if(writer.equals(loginId))
+      boardDao.delete(bno);
+  }
+
+  public long insert(String title, String content, String loginId) {
+    // DAO에서 insert할 때 board_seq.nextval 시퀀스 값으로 bno가 채워진다
+    //  - 서비스에서 그 bno값을 리턴하려면(...접근하려면)
+    //  - 1. DAO에서 시퀀스를 리턴하자 -> NO!. 마이바티스 insert, delete, update의 리턴값은 "변경된 행의 개수"
+    //  - 2. 마이바티스 SelectKey
+    Board board = Board.builder().title(title).content(content).writer(loginId).build();
+    boardDao.insert(board);
+    return board.getBno();
+  }
 }
+
+
+
+
+
+
+
+
+

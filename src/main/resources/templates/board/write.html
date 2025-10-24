@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.slim.min.js"></script>
+<link href="/main.css" rel="stylesheet">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <header th:replace="~{/fragment/header.html}"></header>
+    <nav th:replace="~{/fragment/nav.html}"></nav>
+    <main>
+      <section>
+        <form action="/board/write" method="post">
+          <div class="mt-3 mb-3">
+            <label class="form-label">제목:</label>
+            <input type="text" name="title" id="title" class="form-control">
+          </div>
+          <textarea class="form-control" rows="5" id="content" name="content" placeholder="내용 입력"></textarea>
+          <button class="btn btn-success" onclick="doWrite();">작성하기</button>
+        </form>
+      </section>
+    </main>
+    <footer th:replace="~{/fragment/header.html}"></footer>
+  </div>
+  <script>
+    function doWrite() {
+      const title = $('#title').val();
+      const content = $('#content').val();
+      if(title==='' || content==='') {
+        alert("제목과 내용은 필수입력입니다");
+        return;
+      }
+      $('#write-form').submit();
+    }
+  </script>
+</body>
+</html>
